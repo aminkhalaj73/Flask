@@ -1,11 +1,12 @@
 from datetime import datetime
-from flask import Flask , render_template , url_for , request , redirect
-from logging import DEBUG
+from flask import Flask , render_template , url_for , request , redirect , flash
 
 app = Flask(__name__)
-app.logger.setLevel(DEBUG)
-
 bookmark = []
+app.config['SECRET_KEY'] = b'b\x8e6\xf8\xf7\x88\xbe\x00\x06rwn\xe8\xcbQ-\x96\x86\xaa\x1a;\xc0\x85['
+
+
+
 def store_bookmarks(url):
     bookmark.append(dict(
     url = url,
@@ -31,7 +32,7 @@ def add():
     if request.method == "POST" :
         url = request.form['url']
         store_bookmarks(url)
-        app.logger.debug('Stored url : ' + url)
+        flash("Stored Bookmark '{}'".format(url))
         return redirect(url_for('index'))
     return render_template('add.html')
 @app.errorhandler(404)
